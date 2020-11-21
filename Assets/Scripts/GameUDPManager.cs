@@ -43,7 +43,7 @@ public class GameUDPManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (socket == null) return;
+        
         if (toggle.isOn)
         {
             myoValue = sliderOverride.value;
@@ -53,16 +53,21 @@ public class GameUDPManager : MonoBehaviour
             return; // exit update()
         }
 
-        string data = socket.readData;
+        if (socket != null)
+        {
+            string data = socket.readData;
 
-        if (data == string.Empty) return;
+            if (data == string.Empty) return;
 
-        m_Text.text = string.Format("UDP Port 5020: {0}", data);
+            m_Text.text = string.Format("UDP Port 5020: {0}", data);
 
-        //data = data.Replace(".", ",");
-        float.TryParse(data, out float result);
-        myoValue = result;
-        m_Slider.value = result;
+            //data = data.Replace(".", ",");
+            float.TryParse(data, out float result);
+            myoValue = result;
+            m_Slider.value = result;
+        }
+
+       
         MovePlatform();
     }
 
