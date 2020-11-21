@@ -15,6 +15,8 @@ public class GameUDPManager : MonoBehaviour
     private Slider sliderOverride;
     public Transform platform;
 
+    public RotatorX[] rotator;
+
     private float myoValue;
 
     private void Awake()
@@ -66,8 +68,16 @@ public class GameUDPManager : MonoBehaviour
 
     private void MovePlatform()
     {
-        float newYPosition = Mathf.Abs( myoValue - 5);
-        platform.position = new Vector3(platform.position.x, newYPosition, platform.position.z);
+        //float newYPosition = Mathf.Abs( myoValue - 5);
+        //platform.position = new Vector3(platform.position.x, newYPosition, platform.position.z);
+
+        // Map Range
+        float speedRotator = Mathf.Lerp(1, 0, Mathf.InverseLerp(0, 5, myoValue));
+
+        foreach (var item in rotator)
+        {
+            item.percentSpeed = speedRotator;
+        }
     }
 
     public void ChangePort()
