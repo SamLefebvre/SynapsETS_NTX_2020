@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
 
     private AudioClip clipHitWall;
     private AudioClip clipHitPickup;
+    private AudioSource rollingSound;
 
     // Start is called before the first frame update
     void Start()
@@ -29,6 +30,8 @@ public class PlayerController : MonoBehaviour
 
         clipHitWall = Resources.Load<AudioClip>("Sounds/wall");
         clipHitPickup = Resources.Load<AudioClip>("Sounds/pickup");
+
+        rollingSound = gameObject.GetComponents<AudioSource>()[1];
     }
 
     private void OnMove(InputValue movementValue)
@@ -53,8 +56,24 @@ public class PlayerController : MonoBehaviour
         Vector3 movement = new Vector3(movementX, 0.0f, movementY);
 
         rb.AddForce(movement * speed);
-        
-        
+
+
+
+        rollingSound.volume = 0;
+        if (IsGrounded())
+        {
+            // Map Range
+            var volume = Mathf.Lerp(0, 1, Mathf.InverseLerp(0, 12, rb.velocity.magnitude));
+            var pitch = Mathf.Lerp(0.3f, 1, Mathf.InverseLerp(0, 12, rb.velocity.magnitude));
+            rollingSound.volume = volume;
+            rollingSound.pitch = pitch;
+        }
+
+    }
+
+    private bool IsGrounded()
+    {
+        return Physics.Raycast(transform.position, Vector3.down, 0.51f);
     }
     private void Update()
     {
@@ -81,6 +100,11 @@ public class PlayerController : MonoBehaviour
         if (collision.collider.CompareTag("Wall"))
         {
             gameObject.GetComponent<AudioSource>().PlayOneShot(clipHitWall);
+        }
+
+        if (collision.collider.CompareTag("plane"))
+        {
+            Debug.Log("Game Over");
         }
     }
 

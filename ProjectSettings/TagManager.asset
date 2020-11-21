@@ -6,6 +6,8 @@ TagManager:
   tags:
   - PickUp
   - Wall
+  - plane
+  - ground
   layers:
   - Default
   - TransparentFX

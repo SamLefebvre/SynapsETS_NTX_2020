@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using System.Globalization;
 
 public class GameUDPManager : MonoBehaviour
 {
@@ -16,9 +17,17 @@ public class GameUDPManager : MonoBehaviour
 
     private float myoValue;
 
+    private void Awake()
+    {
+        var culture = new CultureInfo("en-US");
+        CultureInfo.DefaultThreadCurrentCulture = culture;
+        CultureInfo.DefaultThreadCurrentUICulture = culture;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
+        Application.targetFrameRate = 200;
         m_Text = GameObject.Find("udp_values").GetComponent<TextMeshProUGUI>();
         m_Slider = GameObject.Find("Slider").GetComponent<Slider>();
         sliderOverride = GameObject.Find("SliderOverride").GetComponent<Slider>();
@@ -48,7 +57,7 @@ public class GameUDPManager : MonoBehaviour
 
         m_Text.text = string.Format("UDP Port 5020: {0}", data);
 
-        data = data.Replace(".", ",");
+        //data = data.Replace(".", ",");
         float.TryParse(data, out float result);
         myoValue = result;
         m_Slider.value = result;
